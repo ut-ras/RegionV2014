@@ -1,0 +1,8 @@
+prefix=/home/ras/regionV2014/devel
+
+Name: pickup
+Description: Description of pickup
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ras/regionV2014/devel/lib 
+Requires: 
