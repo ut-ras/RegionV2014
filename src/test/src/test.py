@@ -2,14 +2,10 @@
 
 import rospy
 import roslib
-from cv_bridge import CvBridge
-import detectSubscriber
 
-bridge = CvBridge()
-cv_image = bridge.imgmsg_to_cv(data, desired_encoding="passthrough")
 
 def main():
-    rospy.init_node('detect')
+    rospy.init_node('test')
 
     while not rospy.is_shutdown():
         rospy.loginfo('hello')
