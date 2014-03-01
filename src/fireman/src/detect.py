@@ -6,7 +6,7 @@ from cv_bridge import CvBridge
 import detectSubscriber
 
 bridge = CvBridge()
-cv_image = bridge.imgmsg_to_cv(data, desired_encoding="passthrough")
+cv_image = bridge.imgmsg_to_cv(image_message, desired_encoding="passthrough")
 
 def main():
     rospy.init_node('detect')

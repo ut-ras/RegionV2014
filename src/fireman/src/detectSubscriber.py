@@ -8,7 +8,7 @@ def callback(data):
 
 def  listener():
     rospy.init_node('node_name')
-    rospy.Subscriber("/usb_cam/image_raw",Image, callback)
+    rospy.Subscriber("image",Image, callback)
     rospy.spin()
 
 if __name__ == '__main__':
