@@ -1,0 +1,65 @@
+#!/usr/bin/env python2
+import numpy as np
+import cv2
+import rospy
+
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+
+#from source2
+from cv2 import *
+
+image_pub = None
+thresh_pub = None
+bridge = CvBridge()
+
+def image_cb(data):
+    global image_pub, thresh_pub
+    global bridge
+
+    img = np.asarray(bridge.imgmsg_to_cv(data))
+
+    frame = cv2.blur(img, (8,8))
+    hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
+    thresh = cv2.inRange(hsv, np.array((0,0,0)), np.array((255,255,120)))
+    thresh_pub.publish(bridge.cv_to_imgmsg(cv.fromarray(thresh), "mono8"))
+
+#    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+#    ret,thresh = cv2.threshold(gray,100,255,cv2.THRESH_BINARY_INV)
+
+    contours,h = cv2.findContours(thresh,1,2)
+    
+    contours = [cv2.approxPolyDP(cnt, 0.02*cv2.arcLength(cnt, True), True)
+                for cnt in contours]
+
+
+    contours = [cnt for cnt in contours 
+                if any(c[0][1] > (data.height/2) for c in cnt)]
+
+    for cnt in contours:
+        if len(cnt)==5: #originally 5
+            cv2.drawContours(img,[cnt],0,(0,255,0),-1)
+        elif (len(cnt)==6 or len(cnt)==4): #originally 4
+            cv2.drawContours(img,[cnt],0,(0,0,255),-1)
+        elif len(cnt) > 8 and len(cnt) < 30: #orginally 15
+            cv2.drawContours(img,[cnt],0,(0,255,255),2)
+
+
+    image_pub.publish(bridge.cv_to_imgmsg(cv.fromarray(img), "rgb8"))
+
+def main():
+    global image_pub
+    global thresh_pub
+    
+    rospy.init_node('findtool')
+
+    rospy.Subscriber('image', Image, image_cb)
+    image_pub = rospy.Publisher('findtool/image', Image)
+    thresh_pub = rospy.Publisher('findtool/thresh', Image)
+
+    while not rospy.is_shutdown():
+        rospy.loginfo('hello')
+        rospy.sleep(1)
+
+if __name__ == "__main__":
+    main()

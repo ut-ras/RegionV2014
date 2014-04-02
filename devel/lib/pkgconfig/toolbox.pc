@@ -1,8 +1,0 @@
-prefix=/home/ras/regionV2014/devel
-
-Name: toolbox
-Description: Description of toolbox
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/ras/regionV2014/devel/lib 
-Requires: 

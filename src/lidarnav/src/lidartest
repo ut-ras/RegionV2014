@@ -1,0 +1,90 @@
+#!/usr/bin/env python2
+
+import math
+import numpy
+import cv2
+import cv
+
+import rospy
+import roslib
+from roslib import message
+
+import sensor_msgs.point_cloud2 as pc2
+from sensor_msgs.msg import PointCloud2
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+
+
+bridge = CvBridge()
+
+image_pub = None
+
+res = None
+
+
+def lidar_cb(data):
+    global image_pub
+    global bridge
+
+    def w(x): return int(res * x/2)
+    def h(y): return int(res * (0.5-y/2))
+
+    img = numpy.zeros((res,res,1), numpy.uint8)
+    out = numpy.zeros((res,res,3), numpy.uint8)
+
+    points = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+
+    for x,y in points:
+        cv2.rectangle(img, (w(x),h(y)), (w(x), h(y)), (255,255,255), 1)
+
+    def dist(a): return ((a[0]-a[2])**2 + (a[1]-a[3])**2)
+
+    fline = cv2.fitLine(numpy.array(points, numpy.float32), cv.CV_DIST_L2, 0, 0.01, 0.01)
+    fline = (fline[0], fline[1], w(fline[2]), h(fline[3]))
+
+
+    hlines = cv2.HoughLines(img, 1, cv.CV_PI/180, 10)[0]
+    hlines = [(-b,a,r*a,r*b) for r,a,b in 
+                ((mhline[0], math.cos(mhline[1]), 
+                             math.sin(mhline[1])) 
+                 for mhline in hlines)]
+
+
+    plines = cv2.HoughLinesP(img, 1, cv.CV_PI/180, 10)[0]
+    #mpline = max(plines, key=dist)
+    plines = [(mpline[2]-mpline[0], mpline[3]-mpline[1], mpline[2], mpline[3]) for mpline in plines]
+
+    out[:,:,0] = img[:,:,0]
+    out[:,:,1] = img[:,:,0]
+    out[:,:,2] = img[:,:,0]
+
+    def dl(img, l, c): cv2.line(img,                \
+        (int(l[2]-res*l[0]), int(l[3]-res*l[1])),   \
+        (int(l[2]+res*l[0]), int(l[3]+res*l[1])), c, 1)
+
+    dl(out, fline, (255,0,0))
+    for mhline in hlines: dl(out, mhline, (0,255,0))
+    for mpline in plines: dl(out, mpline, (0,0,255))
+
+
+    image_pub.publish(bridge.cv_to_imgmsg(cv.fromarray(out), "bgr8"))
+
+
+def main():
+    global image_pub
+    global res
+
+    rospy.init_node('lidarnav')
+
+    res = int(rospy.get_param('~res', 128))
+
+    rospy.Subscriber('cloud', PointCloud2, lidar_cb)
+    image_pub = rospy.Publisher('lidarnav/image', Image)
+
+    while not rospy.is_shutdown():
+        rospy.loginfo('hello')
+        rospy.sleep(1)
+
+
+if __name__ == "__main__":
+    main()

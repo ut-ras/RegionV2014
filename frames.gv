@@ -1,0 +1,4 @@
+digraph G {
+"map" -> "base_link"[label="Broadcaster: /static_transform_publisher_1395795230567189909\nAverage rate: 10.177 Hz\nMost recent transform: 1395795258.549 \nBuffer length: 4.913 sec\n"];
+"base_link" -> "laser"[label="Broadcaster: /static_transform_publisher_1395795216844378732\nAverage rate: 10.177 Hz\nMost recent transform: 1395795258.549 \nBuffer length: 4.913 sec\n"];
+}

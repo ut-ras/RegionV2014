@@ -1,0 +1,189 @@
+#!/usr/bin/env python2
+
+import math
+import numpy
+import cv2
+import cv
+
+import rospy
+import roslib
+from roslib import message
+
+import sensor_msgs.point_cloud2 as pc2
+from sensor_msgs.msg import PointCloud2
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+from driving.msg import Drive
+
+
+bridge = CvBridge()
+
+image_pub = None
+mec_pub = None
+
+res = 128
+width = 128
+height = 128
+
+pweight = None
+kweight = None
+
+prev = None
+prevd = None
+preva = None
+
+PI = math.pi
+PI2 = math.pi/2
+
+kd = None
+ka = None
+kx = None
+
+SEGMENT_POINT_DISTANCE = 100
+
+def uangle(a, b):
+    r = -math.atan2(-a[1]*b[0] + a[0]*b[1], 
+                    numpy.dot(a, b))
+
+    if r > PI2: r = PI - r
+    if r < -PI2: r = -PI - r
+    
+    return (PI2 - abs(r))/PI2
+
+def euclid(p1, p2):
+    dx = p1[0] - p2[0]
+    dy = p1[1] - p2[1]
+    return math.sqrt(dx*dx + dy*dy)
+
+
+def lidar_cb(data):
+    global image_pub
+    global mec_pub
+    global bridge
+    global prev
+    global prevd, preva
+    global pweight
+    global kweight
+    global kd, ka, kx
+
+    def w(x): return int(res * (1.0-x/0.6))
+    def h(y): return int(res * (0.5-y/2))
+
+    img = numpy.zeros((width,height,1), numpy.uint8)
+    out = numpy.zeros((width,height,3), numpy.uint8)
+    
+    p = (res/2, res)
+    
+    points = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+    """
+    points = []
+    for x,y,_,_ in pc2.read_points(data):
+        #if euclid([x,y], p) < SEGMENT_POINT_DISTANCE:
+        points.append((x,y))
+    """
+    for x,y in ((w(x),h(y)) for x,y in points):
+        if x+1 < width and y+1 < height and x >= 0 and y >= 0:
+            img[x,y] = img[x+1,y] = img[x,y+1] = img[x+1,y+1] = 255
+
+    out[:,:,0] = img[:,:,0]
+    out[:,:,1] = img[:,:,0]
+    out[:,:,2] = img[:,:,0]
+
+
+    def dist(l):
+        return ((l[0]-l[2])**2 + (l[1]-l[3])**2)
+
+    if prev:
+        def weight(l):
+            return (kweight * uangle((l[2]-l[0], l[3]-l[1]), 
+                                     (prev[2]-prev[0], prev[3]-prev[1])) +
+                    pweight * sum(1 if p else 0 for p in cv.InitLineIterator(
+                                  cv.fromarray(img), (l[0], l[1]), (l[2], l[3]))))
+    else:
+        def weight(l):
+            return sum(1 if p else 0 for p in cv.InitLineIterator(
+                       cv.fromarray(img), (l[0], l[1]), (l[2], l[3])))
+
+
+    lines = cv2.HoughLinesP(img, 1, PI/180, 5)
+
+
+    mline = None
+
+    print lines
+    if len(lines > 0):
+        lines = lines[0] 
+        """
+        lines = [(0, (-x*vy)/vx + y,
+                  res-1, ((res-x)*vy)/vx + y) for vx,vy,x,y in
+                    ((x1-x0, y1-y0, x0, y0) for x0,y0,x1,y1 in 
+                        lines) if vx != 0]
+        """
+        if len(lines) > 0:
+            mline = max(lines, key=weight)
+
+            cv2.line(out, (mline[0], mline[1]), 
+                          (mline[2], mline[3]), (255,0,0), 1)
+
+    prev = mline
+
+    # mline now contains our target line
+    a = numpy.array([float(mline[0]), float(mline[1])])
+    n = numpy.array([float(mline[2]-mline[0]), float(mline[3]-mline[1])])
+    n = n/numpy.linalg.norm(n)
+
+
+#    y = (float(mline[3]-mline[1]) / float(mline[2]-mline[0])) * (res/2) + mline[1]
+#    prevd = height - y
+
+    dist = numpy.subtract(a,p)
+    dist = numpy.subtract(dist, numpy.dot(dist, n) * n)
+    prevd = numpy.linalg.norm(dist)
+
+    preva = math.atan2(n[1], n[0])
+
+
+    centerpoint = [(mline[0] + mline[2])/2.0, (mline[1] + mline[3])/2.0]
+
+    distance_to_centerpoint = euclid(centerpoint, p)
+    xdistance = math.sqrt(distance_to_centerpoint**2 + prevd**2)
+
+    errx = kx * xdistance
+    errd = kd * (prevd-25)
+    erra = ka * preva
+
+
+    # chere
+    mec_pub.publish(Drive(0.75, errd, erra, 0))
+    image_pub.publish(bridge.cv_to_imgmsg(cv.fromarray(out), "bgr8"))
+
+
+def main():
+    global image_pub
+    global mec_pub
+    global prev
+    global prevd
+    global pweight
+    global kweight
+    global kd, ka, kx
+
+    rospy.init_node('lidarnav')
+
+    pweight = float(rospy.get_param('~pweight', 1))
+    kweight = float(rospy.get_param('~kweight', 50))
+
+    kd = float(rospy.get_param('~kd', 1/(0.5*50.0)))
+    ka = float(rospy.get_param('~ka', -1/(1.25*PI)))
+    kx = float(rospy.get_param('~kx', 1/(0.5*50.0)))
+
+    rospy.Subscriber('cloud', PointCloud2, lidar_cb)
+    image_pub = rospy.Publisher('lidarnav/image', Image)
+    mec_pub = rospy.Publisher('driving/velcmd', Drive)
+
+    while not rospy.is_shutdown():
+        rospy.loginfo('line: %s dist: %s ang: %s', prev, prevd, preva)
+        rospy.sleep(1)
+
+
+if __name__ == "__main__":
+    main()

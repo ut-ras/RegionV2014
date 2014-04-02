@@ -1,20 +1,61 @@
 #!/usr/bin/env python2
-
-import rospy
+import rospy, cv, cv2
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge, CvBridgeError
 import roslib
-from cv_bridge import CvBridge
-import detectSubscriber
+import numpy as np
 
 bridge = CvBridge()
-cv_image = bridge.imgmsg_to_cv(image_message, desired_encoding="passthrough")
+cv_image = None
 
-def main():
-    rospy.init_node('detect')
+class ColorTracker:
+    #def __init__(self):
+        #cv2.namedWindow("Color Tracker")
+    def run(self):
+        #while(1):
+            global cv_image
+            if cv_image is None:
+                return
+            frame = cv2.blur(np.asarray(cv_image),(3,3))
+            hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
+            thresh = cv2.inRange(hsv,np.array((0, 0, 0)), np.array((255, 255, 40)))
+            thresh2 = thresh.copy()
+            contours,hierarchy = cv2.findContours(thresh,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
+            max_area = 0
+            for cnt in contours:
+                area = cv2.contourArea(cnt)
+                if area > max_area:
+                    max_area = area
+                    best_cnt = cnt
+            M = cv2.moments(best_cnt)
+            cx,cy = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
+            print 'x: ', cx
+            cv2.circle(frame,(cx,cy),5,255,-1)
+            cv2.imshow('frame',frame)
+            #cv2.imshow('thresh',thresh2)
+            if cx <= 195:
+                print 'Left Side, RECTANGLE'
+            elif cx > 195 and cx <= 355:
+                print 'Middle Side, CIRCLE'
+            elif cx > 355:
+                print 'Right Side, TRIANGLE'
+            else:
+                print 'Error, NOTHING'
+            if cv2.waitKey(0) == 27:
+                cv2.destroyAllWindows()
+def callback(data):
+    global cv_image
+#    rospy.loginfo(rospy.get_name() + ": I heard %s", data)
+    cv_image = bridge.imgmsg_to_cv(data, desired_encoding="passthrough")
+
+def  listener():
+    rospy.init_node('node_name')
+    rospy.Subscriber("image",Image, callback)
+    color_tracker = ColorTracker()
 
     while not rospy.is_shutdown():
-        rospy.loginfo('hello')
-        rospy.sleep(1)
+        color_tracker.run()
+       #rospy.spin()
 
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    listener()

@@ -1,0 +1,256 @@
+[ERROR] [WallTime: 1396411340.992679] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 150, in lidar_cb
+    errx = kx * xdistance
+NameError: global name 'kx' is not defined
+
+[ERROR] [WallTime: 1396411341.055616] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411341.147940] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411341.248694] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411341.347398] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411341.443845] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411341.544068] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411341.646439] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411341.744672] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411341.850357] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411341.942120] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411342.043378] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411342.139657] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411342.236763] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411342.336518] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411342.435345] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411342.538042] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411342.633389] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411342.732451] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411342.833517] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411342.933684] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411343.031513] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411343.131252] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411343.231697] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411343.335862] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411343.428961] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411343.530955] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411343.628457] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411343.729951] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411343.830709] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411343.932032] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+[ERROR] [WallTime: 1396411344.028465] bad callback: <function lidar_cb at 0xa0b380c>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/gap_alignment", line 95, in lidar_cb
+    if prev:
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
