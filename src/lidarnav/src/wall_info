@@ -22,7 +22,7 @@ image_pub = None
 state_pub = None
 
 res = 128
-height = res
+height = res*3/4
 width = res*2
 
 DIALATE = (30,3)
@@ -57,7 +57,7 @@ def lidar_cb(data):
     global pweight
     global kweight
 
-    def w(x): return int(res * (.6-x))
+    def w(x): return int(res * (.4-x))
     def h(y): return int(res * (1.0-y))
 
     img = numpy.zeros((height,width,1), numpy.uint8)
@@ -140,11 +140,11 @@ def lidar_cb(data):
     
     global debug
     if debug:
-        import sys
+        line = ""
         for i in range(len(data.wall)/3):
             p = data.wall[i*3]
-            sys.stdout.write('X' if p else ' ')
-        print ""
+            line += 'X' if p else ' '
+        print line
         
         kernel = numpy.ones(DIALATE, numpy.uint8)
         out = cv2.dilate(out, kernel)
@@ -154,7 +154,7 @@ def lidar_cb(data):
 
 
 def main():
-    rospy.init_node('lidarnav')
+    rospy.init_node('wallinfo')
 
     global pweight, kweight
     pweight = float(rospy.get_param('~pweight', 1))
