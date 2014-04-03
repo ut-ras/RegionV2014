@@ -23,7 +23,9 @@ state_pub = None
 
 res = 128
 height = res
-width = res*4
+width = res*2
+
+DIALATE = (30,3)
 
 pweight = None
 kweight = None
@@ -56,7 +58,7 @@ def lidar_cb(data):
     global kweight
 
     def w(x): return int(res * (.6-x))
-    def h(y): return int(res * (2.0-y))
+    def h(y): return int(res * (1.0-y))
 
     img = numpy.zeros((height,width,1), numpy.uint8)
     out = numpy.zeros((height,width,3), numpy.uint8)
@@ -67,8 +69,8 @@ def lidar_cb(data):
         if x+1 < height and y+1 < width and x >= 0 and y >= 0:
             img[x,y] = 255
 
-    kernel = numpy.ones((2,2), numpy.uint8)
-    img = cv2.dilate(img, kernel)
+    #kernel = numpy.ones((2,2), numpy.uint8)
+    #img = cv2.dilate(img, kernel)
 
     out = cv2.cvtColor(img, cv.CV_GRAY2BGR)
 
@@ -105,8 +107,6 @@ def lidar_cb(data):
         if len(lines) > 0:
             mline = max(lines, key=weight)
 
-            cv2.line(out, (mline[0], mline[1]), 
-                          (mline[2], mline[3]), (255,0,0), 1)
 
     prev = mline
 
@@ -114,26 +114,42 @@ def lidar_cb(data):
     a = numpy.array([float(mline[0]), float(mline[1])])
     n = numpy.array([float(mline[2]-mline[0]), float(mline[3]-mline[1])])
     n = n/numpy.linalg.norm(n)
-
     p = (res/2, res)
 
+    # distance
     dist = numpy.subtract(a,p)
     dist = numpy.subtract(dist, numpy.dot(dist, n) * n)
     prevd = numpy.linalg.norm(dist)
 
+    # orientation
     preva = math.atan2(n[1], n[0])
 
+    # pixel array
+    kernel = numpy.ones(DIALATE, numpy.uint8)
+    img = cv2.dilate(img, kernel)
+    lineItr = cv.InitLineIterator(cv.fromarray(img), (mline[0], mline[1]), (mline[2], mline[3]))
 
     # publish data
     data = WallState()
     data.angle = preva
     data.distance = prevd
-    
+    data.wall = [True if p else False for p in lineItr]
+  
     global state_pub
     state_pub.publish(data)
     
     global debug
     if debug:
+        import sys
+        for i in range(len(data.wall)/3):
+            p = data.wall[i*3]
+            sys.stdout.write('X' if p else ' ')
+        print ""
+        
+        kernel = numpy.ones(DIALATE, numpy.uint8)
+        out = cv2.dilate(out, kernel)
+        cv2.line(out, (mline[0], mline[1]), (mline[2], mline[3]), (255,0,0), 1)
+        
         image_pub.publish(bridge.cv_to_imgmsg(cv.fromarray(out), "bgr8"))
 
 
@@ -156,9 +172,12 @@ def main():
     
     rospy.Subscriber('cloud', PointCloud2, lidar_cb)
 
-    while not rospy.is_shutdown():
-        rospy.loginfo('line: %s dist: %s ang: %s', prev, prevd, preva)
-        rospy.sleep(1)
+    if debug:
+        rospy.spin()
+    else:
+        while not rospy.is_shutdown():
+            rospy.loginfo('line: %s dist: %s ang: %s', prev, prevd, preva)
+            rospy.sleep(1)
 
 
 if __name__ == "__main__":

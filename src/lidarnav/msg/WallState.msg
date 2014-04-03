@@ -1,2 +1,3 @@
 float64 angle
 float64 distance
+bool[] wall
