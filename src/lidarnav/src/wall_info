@@ -25,7 +25,7 @@ res = 128
 height = res*3/4
 width = res*2
 
-DIALATE = (30,3)
+DIALATE = (100,2)
 
 pweight = None
 kweight = None
@@ -57,7 +57,7 @@ def lidar_cb(data):
     global pweight
     global kweight
 
-    def w(x): return int(res * (.4-x))
+    def w(x): return int(res * (.5-x))
     def h(y): return int(res * (1.0-y))
 
     img = numpy.zeros((height,width,1), numpy.uint8)
@@ -72,7 +72,6 @@ def lidar_cb(data):
     #kernel = numpy.ones((2,2), numpy.uint8)
     #img = cv2.dilate(img, kernel)
 
-    out = cv2.cvtColor(img, cv.CV_GRAY2BGR)
 
     def dist(l):
         return ((l[0]-l[2])**2 + (l[1]-l[3])**2)
@@ -125,9 +124,12 @@ def lidar_cb(data):
     preva = math.atan2(n[1], n[0])
 
     # pixel array
+    #M = cv2.getRotationMatrix2D((width/2,height/2), preva*180/math.pi, 1)
+    #img = cv2.warpAffine(img, M, (width,height))    
+
     kernel = numpy.ones(DIALATE, numpy.uint8)
     img = cv2.dilate(img, kernel)
-    lineItr = cv.InitLineIterator(cv.fromarray(img), (mline[0], mline[1]), (mline[2], mline[3]))
+    lineItr = cv.InitLineIterator(cv.fromarray(img), (0, height/2), (width, height/2))
 
     # publish data
     data = WallState()
@@ -146,8 +148,7 @@ def lidar_cb(data):
             line += 'X' if p else ' '
         print line
         
-        kernel = numpy.ones(DIALATE, numpy.uint8)
-        out = cv2.dilate(out, kernel)
+        out = cv2.cvtColor(img, cv.CV_GRAY2BGR)
         cv2.line(out, (mline[0], mline[1]), (mline[2], mline[3]), (255,0,0), 1)
         
         image_pub.publish(bridge.cv_to_imgmsg(cv.fromarray(out), "bgr8"))
