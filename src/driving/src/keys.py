@@ -22,6 +22,10 @@ def main():
             d = Drive(speed,speed,speed,speed)
         elif i == 's':
             d = Drive(-speed,-speed,-speed,-speed)
+        elif i == 'a':
+            d = Drive(speed,speed,-speed,-speed)
+        elif i == 'd':
+            d = Drive(-speed,-speed,speed,speed)
         else:
             d = Drive(0.0,0.0,0.0,0.0)
 

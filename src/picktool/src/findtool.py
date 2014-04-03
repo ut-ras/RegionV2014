@@ -15,6 +15,8 @@ wthresh_pub = None
 bthresh_pub = None
 bridge = CvBridge()
 
+INF = float("inf")
+
 def distsq(a, b):
     a = a[0]; b = b[0]
 
@@ -60,7 +62,8 @@ def image_cb(data):
 
     whull = np.array([[[x,y+5]] for [[x,y]] in whull])
 
-    mangs = []
+    minangs = []
+    maxangs = []
 
     for cnt in bcnts:
         pts = zip([cnt[-1]] + list(cnt[:-1]),
@@ -76,18 +79,37 @@ def image_cb(data):
         angs = [math.acos((a + b - c) / (2*math.sqrt(a)*math.sqrt(b)))
                 for a,b,c in dists]
 
-        mangs.append(min(angs))
+        minangs.append(INF if len(angs)==0 else min(angs))
 
 
-    
-    mbcnts = sorted(zip(bcnts, mangs), key=lambda a: a[1])
+        angs = [ang for ang,(a,b,c) in zip(angs, pts)
+                if cv2.pointPolygonTest(whull, (a[0][0], a[0][1]), False) > 0
+                and cv2.pointPolygonTest(whull, (c[0][0], c[0][1]), False) > 0]
 
-    if len(mbcnts) > 0:   
-        cv2.drawContours(img,[mbcnts[0][0]],0,(255,0,0),-1)
-    if len(mbcnts) > 1:   
-        cv2.drawContours(img,[mbcnts[1][0]],0,(0,255,0),-1)
-    if len(mbcnts) > 2:   
-        cv2.drawContours(img,[mbcnts[-1][0]],0,(0,0,255),-1)
+        maxangs.append(-INF if len(angs)==0 else max(angs))
+
+
+
+    mbcnts = sorted(zip(bcnts, minangs, maxangs), 
+                    key=lambda (c,_,__): cv2.contourArea(c),
+                    reverse=True)
+
+    if len(mbcnts) < 3:
+        #rospy.logwarn('No shapes detected')
+        return
+
+    mbcnts = mbcnts[:3]
+
+
+    i,(triangle,_,_) = min(enumerate(mbcnts), key=lambda (_,(c,a,__)): a)
+    del mbcnts[i]
+    i,(circle,_,_) = max(enumerate(mbcnts), key=lambda (_,(c,__,a)): a)
+    del mbcnts[i]
+    rectangle,_,_ = mbcnts[0]    
+
+    cv2.drawContours(img,[triangle],0,(255,0,0),-1)
+    cv2.drawContours(img,[rectangle],0,(0,255,0),-1)
+    cv2.drawContours(img,[circle],0,(0,0,255),-1)
 
     image_pub.publish(bridge.cv_to_imgmsg(cv.fromarray(img), "rgb8"))
 

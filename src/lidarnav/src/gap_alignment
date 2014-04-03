@@ -21,9 +21,9 @@ bridge = CvBridge()
 image_pub = None
 mec_pub = None
 
-res = 128
-width = 128
-height = 128
+width = 256
+height = width
+res = width
 
 pweight = None
 kweight = None
@@ -31,6 +31,7 @@ kweight = None
 prev = None
 prevd = None
 preva = None
+prevx = None
 
 PI = math.pi
 PI2 = math.pi/2
@@ -39,7 +40,7 @@ kd = None
 ka = None
 kx = None
 
-SEGMENT_POINT_DISTANCE = 100
+SEGMENT_POINT_DISTANCE = width/2
 
 def uangle(a, b):
     r = -math.atan2(-a[1]*b[0] + a[0]*b[1], 
@@ -61,7 +62,7 @@ def lidar_cb(data):
     global mec_pub
     global bridge
     global prev
-    global prevd, preva
+    global prevd, preva, prevx
     global pweight
     global kweight
     global kd, ka, kx
@@ -74,16 +75,24 @@ def lidar_cb(data):
     
     p = (res/2, res)
     
-    points = [(x,y) for x,y,_,_ in pc2.read_points(data)]
-    """
     points = []
     for x,y,_,_ in pc2.read_points(data):
-        #if euclid([x,y], p) < SEGMENT_POINT_DISTANCE:
-        points.append((x,y))
-    """
+        if euclid([w(x),h(y)], p) < SEGMENT_POINT_DISTANCE:
+            points.append((x,y))
+        
+    pdict = {}   
+ 
     for x,y in ((w(x),h(y)) for x,y in points):
         if x+1 < width and y+1 < height and x >= 0 and y >= 0:
-            img[x,y] = img[x+1,y] = img[x,y+1] = img[x+1,y+1] = 255
+            img[x,y] = 255
+            #img[x,y] = img[x+1,y] = img[x,y+1] = img[x+1,y+1] = 255
+            pdict[(x,y)] = pdict[(x+1,y)] = pdict[(x,y+1)] = pdict[(x+1,y+1)] = True
+
+    centerpoint = [0,0]
+    for x,y in pdict.keys():
+        centerpoint += [x,y]
+    centerpoint[0] /= len(pdict.keys())
+    centerpoint[1] /= len(pdict.keys())
 
     out[:,:,0] = img[:,:,0]
     out[:,:,1] = img[:,:,0]
@@ -93,7 +102,7 @@ def lidar_cb(data):
     def dist(l):
         return ((l[0]-l[2])**2 + (l[1]-l[3])**2)
 
-    if prev:
+    if prev != None:
         def weight(l):
             return (kweight * uangle((l[2]-l[0], l[3]-l[1]), 
                                      (prev[2]-prev[0], prev[3]-prev[1])) +
@@ -104,27 +113,20 @@ def lidar_cb(data):
             return sum(1 if p else 0 for p in cv.InitLineIterator(
                        cv.fromarray(img), (l[0], l[1]), (l[2], l[3])))
 
-
     lines = cv2.HoughLinesP(img, 1, PI/180, 5)
-
 
     mline = None
 
-    print lines
-    if len(lines > 0):
+    if lines != None:
         lines = lines[0] 
-        """
-        lines = [(0, (-x*vy)/vx + y,
-                  res-1, ((res-x)*vy)/vx + y) for vx,vy,x,y in
-                    ((x1-x0, y1-y0, x0, y0) for x0,y0,x1,y1 in 
-                        lines) if vx != 0]
-        """
+        
         if len(lines) > 0:
             mline = max(lines, key=weight)
 
             cv2.line(out, (mline[0], mline[1]), 
                           (mline[2], mline[3]), (255,0,0), 1)
 
+    image_pub.publish(bridge.cv_to_imgmsg(cv.fromarray(out), "bgr8"))
     prev = mline
 
     # mline now contains our target line
@@ -136,26 +138,25 @@ def lidar_cb(data):
 #    y = (float(mline[3]-mline[1]) / float(mline[2]-mline[0])) * (res/2) + mline[1]
 #    prevd = height - y
 
+    # error in y direction
     dist = numpy.subtract(a,p)
     dist = numpy.subtract(dist, numpy.dot(dist, n) * n)
     prevd = numpy.linalg.norm(dist)
-
+    
+    # error in orientation
     preva = math.atan2(n[1], n[0])
 
-
+    # error in x direction
     centerpoint = [(mline[0] + mline[2])/2.0, (mline[1] + mline[3])/2.0]
-
     distance_to_centerpoint = euclid(centerpoint, p)
-    xdistance = math.sqrt(distance_to_centerpoint**2 + prevd**2)
+    prevx = math.sqrt(distance_to_centerpoint**2 - prevd**2)
 
-    errx = kx * xdistance
+    errx = kx * prevx
     errd = kd * (prevd-25)
     erra = ka * preva
 
-
     # chere
-    mec_pub.publish(Drive(0.75, errd, erra, 0))
-    image_pub.publish(bridge.cv_to_imgmsg(cv.fromarray(out), "bgr8"))
+    mec_pub.publish(Drive(errx, errd, erra, 0))
 
 
 def main():
@@ -181,7 +182,7 @@ def main():
     mec_pub = rospy.Publisher('driving/velcmd', Drive)
 
     while not rospy.is_shutdown():
-        rospy.loginfo('line: %s dist: %s ang: %s', prev, prevd, preva)
+        rospy.loginfo('line: %s xdist: %s ydist: %s ang: %s', prev, prevx, prevd, preva)
         rospy.sleep(1)
 
 
