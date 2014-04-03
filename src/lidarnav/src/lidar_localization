@@ -2,58 +2,66 @@
 import rospy
 from lidarnav.msg import WallState
 
-GAP_THRESHOLD = 20
-inGap = False
-prevCenter = None
-location = 0
+class WaveGapLocalizer:
+    def __init__(self, startingLocation=0, fixedIndexOffset=0, gapThreshold=20):
+        self.gapThreshold = gapThreshold
+        self.fixedIndexOffset = fixedIndexOffset
+        self.inGap = False
+        self.prevCenter = None
+        self.xlocation = startingLocation
+        self.canMoveForward = False
+
+    def update(self, arr):
+        start = len(arr)/2 + self.fixedIndexOffset
+        gapLength = 0
+
+        prevInGap = self.inGap
+        self.inGap = not arr[start]
+
+        # see how far left the gap or wave goes
+        leftIndex = start
+        leftLen = 0
+        while leftIndex > 0:
+            if arr[leftIndex] == self.inGap:
+                leftLen += 1
+            else:
+                break
+            leftIndex -= 1
+
+        # see how far right the gap or wave goes
+        rightIndex = start
+        rightLen = 0
+        while rightIndex < len(arr):
+            if arr[rightIndex] == self.inGap:
+                rightLen += 1
+            else:
+                break
+            rightIndex += 1
+
+        # see if the gap is big enough
+        self.canMoveForward = not self.inGap and leftLen >= self.gapThreshold/2 and rightLen >= self.gapThreshold/2
+       
+        # move our location by how much the center of the gap or wave has moved since last time
+        center = (leftIndex + rightIndex)/2
+        if self.prevCenter == None:
+            self.prevCenter = center
+        
+        if self.inGap == prevInGap:
+            self.xlocation -= (center - self.prevCenter)
+        
+        self.prevCenter = center
+
+localizer = None
 
 def callback(data):
-    arr = data.wall
-    start = len(arr)/2
-    gapLength = 0    
-
-    global inGap
-    prevInGap = inGap
-    inGap = arr[start]
-
-    # go left
-    leftIndex = start
-    leftLen = 0
-    while leftIndex > 0:
-        if arr[leftIndex] == inGap:
-            leftLen += 1
-        else:
-            break
-        leftIndex -= 1
-
-    # go right
-    rightIndex = start
-    rightLen = 0
-    while rightIndex < len(arr):
-        if arr[rightIndex] == inGap:
-            rightLen += 1
-        else:
-            break
-        rightIndex += 1
-
-    canMoveForward = leftLen >= GAP_THRESHOLD/2 and rightLen >= GAP_THRESHOLD/2
-    
-    center = (leftIndex + rightIndex)/2
-    if prevCenter == None:
-        prevCenter = center
-    
-    global location, prevCenter
-    if inGap == prevInGap:
-        location += (center - prevCenter)
-    
-    prevCenter = center
-
-    print canMoveForward, location, center
-
+    global localizer
+    localizer.update(data.wall)
 
 def main():
     rospy.init_node('lidar_localization')
     rospy.Subscriber("wall/state", WallState, callback)
+    global localizer
+    localizer = WaveGapLocalizer()
     rospy.spin()
         
 if __name__ == '__main__':
