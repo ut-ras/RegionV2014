@@ -3,7 +3,8 @@ import rospy
 from lidarnav.msg import WallState
 
 class WallGapLocalizer:
-    def __init__(self, gapSize=50, startingLocation=0):
+    def __init__(self, debug, gapSize=50, startingLocation=0):
+        self.debug = debug
         self.gapSize = gapSize
         self.inFrontOfWave = False
         self.prevCenter = None
@@ -53,7 +54,8 @@ class WallGapLocalizer:
             self.location = round(self.location/float(self.gapSize/2)) * self.gapSize/2
         
         self.prevCenter = center
-       
-        print self.canMoveForward, self.location, leftLen, rightLen
+      
+        if self.debug: 
+            print self.canMoveForward, self.location, leftLen, rightLen
 
 

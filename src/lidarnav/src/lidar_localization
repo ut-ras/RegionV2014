@@ -11,9 +11,12 @@ def callback(data):
 
 def main():
     global localizer
-    localizer = WallGapLocalizer()
 
     rospy.init_node('lidar_localization')
+    
+    debug = bool(rospy.get_param('~debug'))
+    localizer = WallGapLocalizer(debug)
+    
     rospy.Subscriber("wall/state", WallState, callback)
     rospy.spin()
         

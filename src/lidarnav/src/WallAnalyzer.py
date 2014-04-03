@@ -105,7 +105,7 @@ class WallAnalyzer:
         a = numpy.array([float(mline[0]), float(mline[1])])
         n = numpy.array([float(mline[2]-mline[0]), float(mline[3]-mline[1])])
         n = n/numpy.linalg.norm(n)
-        p = (self.res/2, self.res)
+        p = (self.width/2, self.height)
 
         # distance
         dist = numpy.subtract(a,p)

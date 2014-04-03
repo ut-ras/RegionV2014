@@ -1,0 +1,43 @@
+#!/usr/bin/env python2
+
+import rospy
+import roslib
+from roslib import message
+
+from sensor_msgs.msg import PointCloud2
+
+from lidarnav.msg import WallState
+from WallAnalyzer import WallAnalyzer
+from WallGapLocalizer import WallGapLocalizer
+
+anaylzer = None
+localizer = None
+
+def callback(data):
+    global analyzer, localizer
+
+    analyzer.update(data)
+    localizer.update(analyzer.wall_arr)
+    print("x:", localizer.location, 
+          "y:", analyzer.wall_ydistance,
+          "angle:", analyzer.wall_angle)
+
+def main():
+    global analyzer, localizer
+
+    rospy.init_node('find_gap')
+
+    debug = bool(rospy.get_param('~debug'))
+    pweight = float(rospy.get_param('~pweight', 1))
+    kweight = float(rospy.get_param('~kweight', 50))
+    analyzer = WallAnalyzer(debug, pweight, kweight)
+    localizer = WallGapLocalizer(debug)
+
+    rospy.Subscriber('cloud', PointCloud2, callback)
+    
+    rospy.spin()
+
+
+if __name__ == "__main__":
+    main()
+
