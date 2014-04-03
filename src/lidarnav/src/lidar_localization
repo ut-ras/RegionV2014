@@ -3,8 +3,8 @@ import rospy
 from lidarnav.msg import WallState
 
 class WallGapLocalizer:
-    def __init__(self, gapThreshold=50, startingLocation=0):
-        self.gapThreshold = gapThreshold
+    def __init__(self, gapSize=50, startingLocation=0):
+        self.gapSize = gapSize
         self.inFrontOfWave = False
         self.prevCenter = None
         self.location = startingLocation
@@ -12,7 +12,6 @@ class WallGapLocalizer:
 
     def update(self, arr):
         start = len(arr)/2
-        gapLength = 0    
 
         prevInFrontOfWave = self.inFrontOfWave
         self.inFrontOfWave = arr[start]
@@ -20,7 +19,7 @@ class WallGapLocalizer:
         # go left
         leftIndex = start
         leftLen = 0
-        while leftIndex > 0:
+        while leftIndex > start - self.gapSize:
             if arr[leftIndex] == self.inFrontOfWave:
                 leftLen += 1
             else:
@@ -30,15 +29,16 @@ class WallGapLocalizer:
         # go right
         rightIndex = start
         rightLen = 0
-        while rightIndex < len(arr):
+        while rightIndex < start + self.gapSize:
             if arr[rightIndex] == self.inFrontOfWave:
                 rightLen += 1
             else:
                 break
             rightIndex += 1
 
+
         # see if the gap is big enough
-        self.canMoveForward = not self.inFrontOfWave and leftLen >= self.gapThreshold/2 and rightLen >= self.gapThreshold/2
+        self.canMoveForward = not self.inFrontOfWave and leftLen >= self.gapSize/2 and rightLen >= self.gapSize/2
         
         # move our location by how much the center of the gap or wave has moved since last time
         center = (leftIndex + rightIndex)/2
@@ -48,8 +48,12 @@ class WallGapLocalizer:
         if self.inFrontOfWave == prevInFrontOfWave:
             self.location += (center - self.prevCenter)
         
-        self.prevCenter = center
+        # if in the center of something, correct the location to reflect that
+        if abs(leftLen - rightLen) < 2:
+            self.location = round(self.location/float(self.gapSize/2)) * self.gapSize/2
         
+        self.prevCenter = center
+       
         print self.canMoveForward, self.location, leftLen, rightLen
 
 localizer = None
