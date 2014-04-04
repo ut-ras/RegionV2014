@@ -1,25 +1,63 @@
 #!/usr/bin/env python2
 
+import rospy
+import roslib
 import struct
 
-file = open( "/dev/input/mouse1", "rb" )
+from driving.srv import SetTwist, SetTwistResponse
+from driving.msg import Twist
 
+pub = None
+mouse = None
+
+scale = None
 xsum = 0
 ysum = 0
 
+def reset(data):
+    global pub
+    global scale
+    global xsum, ysum
+
+    xsum, ysum = data.x, data.y
+    pub.publish(Twist(data.x, data.y, 0))
+    return SetTwistResponse()
+
+
 def getMouseEvent():
-  buf = file.read(3)
-  x,y = struct.unpack( "bb", buf[1:] )
-  print ("x: %d, y: %d" % (x, y) )
-  return x,y
-  # return stuffs
+    global mouse
+
+    buf = mouse.read(3)
+    x,y = struct.unpack( "bb", buf[1:] )
+
+    return x,y
+    # return stuffs
 
 
-while(1):
-  x,y = getMouseEvent()
-  xsum += x
-  ysum += y
-  print xsum, ysum, '\n'
+def main():
+    global mouse
+    global pub
+    global scale
+    global xsum, ysum
 
-file.close()
+    rospy.init_node('mousereader')
+    mouse = open('/dev/input/mice', 'rb')
+    
+    rospy.Service('mouse/reset', SetTwist, reset)
+    pub = rospy.Publisher('mouse/pose', Twist)
 
+    scale = float(rospy.get_param('~scale', 0.001*(1/34.463)))
+
+    rospy.loginfo('Initialized mousereading')
+
+    while not rospy.is_shutdown():
+        x,y = getMouseEvent()
+        xsum += x
+        ysum += y
+
+        pub.publish(Twist(scale*xsum, scale*ysum, 0))
+
+    mouse.close()
+
+if __name__ == "__main__":
+    main()

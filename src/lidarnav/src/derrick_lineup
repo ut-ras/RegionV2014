@@ -31,12 +31,14 @@ kweight = None
 prev = None
 prevd = None
 preva = None
+prevx = None
 
 PI = math.pi
 PI2 = math.pi/2
 
 kd = None
 ka = None
+kx = None
 
 
 def uangle(a, b):
@@ -48,16 +50,20 @@ def uangle(a, b):
     
     return (PI2 - abs(r))/PI2
 
+def euclid(p1, p2):
+    dx = p1[0] - p2[0]
+    dy = p1[1] - p2[1]
+    return math.sqrt(dx*dx + dy*dy)
 
 def lidar_cb(data):
     global image_pub
     global mec_pub
     global bridge
     global prev
-    global prevd, preva
+    global prevd, preva, prevx
     global pweight
     global kweight
-    global kd, ka, speed
+    global kd, ka, kx, speed
 
     def w(x): return int(res * (1.0-x/0.6))
     def h(y): return int(res * (0.5-y/2))
@@ -122,14 +128,22 @@ def lidar_cb(data):
 #    y = (float(mline[3]-mline[1]) / float(mline[2]-mline[0])) * (res/2) + mline[1]
 #    prevd = height - y
 
+    # error in y direction
     dist = numpy.subtract(a,p)
     dist = numpy.subtract(dist, numpy.dot(dist, n) * n)
     prevd = numpy.linalg.norm(dist)
 
+    # error in orientation
     preva = math.atan2(n[1], n[0])
 
-    errd = kd * (prevd-40)
+    # error in x direction
+    centerpoint = [(mline[0] + mline[2])/2.0, (mline[1] + mline[3])/2.0]
+    distance_to_centerpoint = euclid(centerpoint, p)
+    prevx = math.sqrt(distance_to_centerpoint**2 - prevd**2)
+    
+    errd = kd * (prevd-50)
     erra = ka * preva
+    errx = kx * prevx
 
 
     # chere
@@ -145,26 +159,28 @@ def main():
     global mec_pub
     global prev
     global prevd
+    global prevx
     global pweight
     global kweight
-    global kd, ka, speed
+    global kd, ka, kx, speed
 
     rospy.init_node('lidarnav')
 
     pweight = float(rospy.get_param('~pweight', 1))
     kweight = float(rospy.get_param('~kweight', 50))
 
-    kd = float(rospy.get_param('~kd', 0.02))
+    kd = float(rospy.get_param('~kd', 0.025))
     ka = float(rospy.get_param('~ka', -0.2))
+    kx = float(rospy.get_param('~kx', 0.025))
 
     speed = float(rospy.get_param('~speed', 0.3))
 
     rospy.Subscriber('cloud', PointCloud2, lidar_cb)
-    image_pub = rospy.Publisher('lidarnav/image', Image)
+    image_pub = rospy.Publisher('derrick_lineup/image', Image)
     mec_pub = rospy.Publisher('driving/velcmd', Twist)
 
     while not rospy.is_shutdown():
-        rospy.loginfo('line: %s dist: %s ang: %s', prev, prevd, preva)
+        rospy.loginfo('line: %s xdist: %s ydist: %s ang: %s', prev, prevx, prevd, preva)
         rospy.sleep(1)
 
 

@@ -6,6 +6,7 @@ import roslib
 import serial
 
 from driving.msg import Command
+from driving.srv import Request
 
 
 lm4f = None
@@ -27,10 +28,10 @@ def main():
 
     rospy.init_node('lm4f')
     lm4f = serial.Serial(port='/dev/lm4f',
-                         baudrate=115200,
-                         timeout=1)
+                         baudrate=115200)
 
     rospy.Subscriber('driving/lm4f', Command, cmd);
+    rospy.Service('driving/lm4f', Request, cmd) 
 
     rospy.spin()
     lm4f.close()

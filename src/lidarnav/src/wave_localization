@@ -5,6 +5,7 @@ import roslib
 from roslib import message
 
 from sensor_msgs.msg import PointCloud2
+from driving.msg import Twist
 
 from lidarnav.msg import WallState
 from WallAnalyzer import WallAnalyzer
@@ -12,18 +13,22 @@ from WallGapLocalizer import WallGapLocalizer
 
 anaylzer = None
 localizer = None
+pub = None
 
 def callback(data):
-    global analyzer, localizer
+    global analyzer, localizer, pub
 
     analyzer.update(data)
     localizer.update(analyzer.wall_arr)
-    print("x:", localizer.location, 
-          "y:", analyzer.wall_ydistance,
-          "angle:", analyzer.wall_angle)
+
+    pose = Twist()
+    pose.x = localizer.location
+    pose.y = analyzer.wall_ydistance
+    pose.a = analyzer.wall_angle
+    pub.publish(pose)
 
 def main():
-    global analyzer, localizer
+    global analyzer, localizer, pub
 
     rospy.init_node('find_gap')
 
@@ -34,8 +39,10 @@ def main():
     localizer = WallGapLocalizer(debug)
 
     rospy.Subscriber('cloud', PointCloud2, callback)
+    pub = rospy.Publisher('pose', Twist)
     
     rospy.spin()
+
 
 
 if __name__ == "__main__":

@@ -36,6 +36,7 @@ def mecanum(vx, vy, r):
      ms = [m/mbig for m in ms]
 
    ms = [m if abs(m) >= 0.1 else 0 for m in ms]
+   ms = [m*0.85 for m in ms]
 
    pubm.publish(Command(['a','b','c','d'], ms))
 

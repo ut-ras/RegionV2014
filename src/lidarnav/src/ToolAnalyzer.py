@@ -70,70 +70,10 @@ class ToolAnalyzer:
         
         contours, hieracy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cv2.drawContours(out, contours, -1, (0, 0, 255), 1)
-        #print contours
-        """ 
-        cvimg = cv.fromarray(img)
-
-        if self.prev:
-            def weight(l):
-                return (self.kweight * self.uangle((l[2]-l[0], l[3]-l[1]), 
-                                         (self.prev[2]-self.prev[0], self.prev[3]-self.prev[1])) +
-                        self.pweight * sum(1 if p else 0 for p in cv.InitLineIterator(
-                                      cvimg, (l[0], l[1]), (l[2], l[3]))))
-        else:
-            def weight(l):
-                return sum(1 if p else 0 for p in cv.InitLineIterator(
-                           cvimg, (l[0], l[1]), (l[2], l[3])))
-
-
-        lines = cv2.HoughLinesP(img, 1, PI/180, 5)
-
-        mline = None
-
-
-        if len(lines > 0):
-            lines = lines[0] 
-
-            lines = [(0, (-x*vy)/vx + y,
-                      self.width-1, ((self.width-x)*vy)/vx + y) for vx,vy,x,y in
-                        ((x1-x0, y1-y0, x0, y0) for x0,y0,x1,y1 in 
-                            lines) if vx != 0]
-
-            if len(lines) > 0:
-                mline = max(lines, key=weight)
-
-
-        self.prev = mline
-
-        # mline now contains our target line
-        a = numpy.array([float(mline[0]), float(mline[1])])
-        n = numpy.array([float(mline[2]-mline[0]), float(mline[3]-mline[1])])
-        n = n/numpy.linalg.norm(n)
-        p = (self.width/2, self.height)
-
-        # distance
-        dist = numpy.subtract(a,p)
-        dist = numpy.subtract(dist, numpy.dot(dist, n) * n)
-        self.prevd = numpy.linalg.norm(dist)
-
-        # orientation
-        self.preva = math.atan2(n[1], n[0])
-
-        # pixel array
-        #M = cv2.getRotationMatrix2D((self.width/2,self.height/2), self.preva*180/math.pi, 1)
-        #img = cv2.warpAffine(img, M, (self.width,self.height))    
-
-        kernel = numpy.ones(self.dialation, numpy.uint8)
-        img = cv2.dilate(img, kernel)
-        lineItr = cv.InitLineIterator(cv.fromarray(img), (0, self.height/2), (self.width, self.height/2))
-
-        # publish data
-        self.wall_angle = self.preva
-        self.wall_ydistance = self.prevd
-        self.wall_arr = [True if p else False for p in lineItr]
-        """
+       
+        
+ 
         if self.debug:
-            #cv2.line(out, (mline[0], mline[1]), (mline[2], mline[3]), (255,0,0), 1)
             self.out_img = cv.fromarray(out)
 
 
