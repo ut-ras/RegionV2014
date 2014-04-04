@@ -4,13 +4,12 @@ import struct
 import rospy
 import roslib
 
-from driving.msg import Drive
+from driving.msg import Command
 
 def main():
     rospy.init_node('keys')
 
-    pubm = rospy.Publisher('driving/motors', Drive)
-    pubs = rospy.Publisher('driving/servos', Drive)
+    pubm = rospy.Publisher('driving/lm4f', Command)
 
     speed = rospy.get_param('~speed', 0.7)
 
@@ -19,18 +18,19 @@ def main():
         i = raw_input('> ')
 
         if i == 'w':
-            d = Drive(speed,speed,speed,speed)
+            d = [speed,speed,speed,speed]
         elif i == 's':
-            d = Drive(-speed,-speed,-speed,-speed)
+            d = [-speed,-speed,-speed,-speed]
         elif i == 'a':
-            d = Drive(speed,speed,-speed,-speed)
+            d = [speed,-speed,speed,-speed]
         elif i == 'd':
-            d = Drive(-speed,-speed,speed,speed)
+            d = [-speed,speed,-speed,speed]
         else:
-            d = Drive(0.0,0.0,0.0,0.0)
+            d = [0.0,0.0,0.0,0.0]
 
+        d = Command(['a','b','c','d'], d)
+        
         pubm.publish(d)
-        pubs.publish(d)
 
         rospy.sleep(0.25)
 

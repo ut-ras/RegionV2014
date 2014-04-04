@@ -3,39 +3,38 @@
 import struct
 import rospy
 import roslib
+import serial
 
-#roslib.load_manifest('driving')
+from driving.msg import Command
 
-from driving.msg import Drive
+
+lm4f = None
 
 def send(c, data):
-    data = data * 0.85
+    global lm4f
+
     data = data/2 + 0.5
+    ndata = int(255*data)
+    lm4f.write('%c%c\n' % (c,ndata))
+    lm4f.read(2)
 
-    with open('/dev/lm4f', 'w') as lm4f:
-        ndata = int(255*data)
-        lm4f.write('%c%c' % (c,ndata))
-        olddata = ndata
-
-def mcb(data):
-    send('a', data.a)
-    send('b', data.b)
-    send('c', data.c)
-    send('d', data.d)
-
-def scb(data):
-    send('e', data.a)
-    send('f', data.a)
-    send('g', data.a)
-    send('h', data.a)
+def cmd(data):
+    for c,v in zip(data.cmds, data.vals):
+        send(c, v)
 
 def main():
-    rospy.init_node('lm4f')
+    global lm4f
 
-    rospy.Subscriber('driving/motors', Drive, mcb);
-    rospy.Subscriber('driving/servos', Drive, scb);
+    rospy.init_node('lm4f')
+    lm4f = serial.Serial(port='/dev/lm4f',
+                         baudrate=115200,
+                         timeout=1)
+
+    rospy.Subscriber('driving/lm4f', Command, cmd);
 
     rospy.spin()
+    lm4f.close()
+
 
 if __name__ == "__main__":
     main()

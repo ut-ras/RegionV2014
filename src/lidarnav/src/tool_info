@@ -1,0 +1,42 @@
+#!/usr/bin/env python2
+
+import rospy
+import roslib
+from roslib import message
+
+from sensor_msgs.msg import PointCloud2
+from sensor_msgs.msg import Image
+
+from cv_bridge import CvBridge
+from lidarnav.msg import WallState
+from ToolAnalyzer import ToolAnalyzer
+
+anaylzer = None
+image_pub = None
+state_pub = None
+
+def callback(data):
+    global analyzer, state_pub, image_pub
+    analyzer.update(data)
+    
+    if analyzer.debug:
+        image_pub.publish(bridge.cv_to_imgmsg(analyzer.out_img, "bgr8"))
+
+def main():
+    global analyzer, bridge, image_pub, state_pub
+    bridge = CvBridge()
+
+    rospy.init_node('toolinfo')
+
+    debug = bool(rospy.get_param('~debug'))
+    analyzer = ToolAnalyzer(debug)
+
+    rospy.Subscriber('cloud', PointCloud2, callback)
+    if debug:
+        image_pub = rospy.Publisher('tools/image', Image)
+    state_pub = rospy.Publisher('tools/state', WallState)
+
+    rospy.spin()
+
+if __name__ == "__main__":
+    main()

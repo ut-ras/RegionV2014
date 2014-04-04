@@ -3,7 +3,8 @@
 import rospy
 import roslib
 
-from driving.msg import Drive
+from driving.msg import Command
+from driving.msg import Twist
 
 pubm = None
 
@@ -28,34 +29,26 @@ def mecanum(vx, vy, r):
    m2 += r
    m3 += -r
 
-   if m0 > 1 or m1 > 1 or m2 > 1 or m3 > 1:
-     mbig = max(m0, m1, m2, m3)
-     m0 = m0/mbig
-     m1 = m1/mbig
-     m2 = m2/mbig
-     m3 = m3/mbig
+   ms = [m0,m1,m2,m3]
 
-   if abs(m0) < .1:
-     m0 = 0  
-   if abs(m1) < .1:
-     m1 = 0 
-   if abs(m2) < .1:
-     m2 = 0 
-   if abs(m3) < .1:
-     m3 = 0
+   if any(abs(m) > 1 for m in ms):
+     mbig = max(abs(m) for m in ms)
+     ms = [m/mbig for m in ms]
 
-   pubm.publish(Drive(m0, m1, m2, m3))
+   ms = [m if abs(m) >= 0.1 else 0 for m in ms]
+
+   pubm.publish(Command(['a','b','c','d'], ms))
 
 def mecsub(data):
-    mecanum(data.a, data.b, data.c)
+    mecanum(data.x, data.y, data.a)
 
 def main():
     global pubm
 
     rospy.init_node('driving')
 
-    pubm = rospy.Publisher('driving/motors', Drive)
-    subm = rospy.Subscriber('driving/velcmd', Drive, mecsub)
+    pubm = rospy.Publisher('driving/lm4f', Command)
+    subm = rospy.Subscriber('driving/velcmd', Twist, mecsub)
 
 
     while not rospy.is_shutdown():

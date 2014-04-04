@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 import struct
 
 file = open( "/dev/input/mouse1", "rb" )

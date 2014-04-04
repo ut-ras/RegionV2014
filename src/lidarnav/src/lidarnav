@@ -13,7 +13,7 @@ import sensor_msgs.point_cloud2 as pc2
 from sensor_msgs.msg import PointCloud2
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
-from driving.msg import Drive
+from driving.msg import Twist
 
 
 bridge = CvBridge()
@@ -133,7 +133,7 @@ def lidar_cb(data):
 
 
     # chere
-    mec_pub.publish(Drive(0.75, errd, erra, 0))
+    mec_pub.publish(Twist(0.75, errd, erra))
     image_pub.publish(bridge.cv_to_imgmsg(cv.fromarray(out), "bgr8"))
 
 
@@ -156,7 +156,7 @@ def main():
 
     rospy.Subscriber('cloud', PointCloud2, lidar_cb)
     image_pub = rospy.Publisher('lidarnav/image', Image)
-    mec_pub = rospy.Publisher('driving/velcmd', Drive)
+    mec_pub = rospy.Publisher('driving/velcmd', Twist)
 
     while not rospy.is_shutdown():
         rospy.loginfo('line: %s dist: %s ang: %s', prev, prevd, preva)
