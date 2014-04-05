@@ -65,7 +65,7 @@ def lidar_cb(data):
     img = numpy.zeros((width,height,1), numpy.uint8)
     out = numpy.zeros((width,height,3), numpy.uint8)
 
-    points = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+    points = [(x,y) for x,y,_,_ in pc2.read_points(data, field_names=None, skip_nans=False, uvs=[[width, height]])]
 
     for x,y in ((w(x),h(y)) for x,y in points):
         if x+1 < width and y+1 < height and x >= 0 and y >= 0:

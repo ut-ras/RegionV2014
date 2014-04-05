@@ -1,7 +1,7 @@
 <launch>
     <include file="$(find launch_files)/launch/lidar.launch" />
     <node pkg="lidarnav" type="wall_info" name="wall_info">
-        <param name="debug" value="False"/>
+        <param name="debug" value="True"/>
     </node>
     <!--<node pkg="lidarnav" type="pcmask" name="pcmask">-->
     <!--<node pkg="lidarnav" type="navi2" name="navi" />-->

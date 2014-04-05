@@ -1,0 +1,240 @@
+[ERROR] [WallTime: 1396670254.891553] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670254.986479] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670255.085179] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670255.195691] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670255.307456] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670255.420104] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670255.534999] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670255.621256] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670255.736796] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670255.854699] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670255.941249] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670256.058157] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670256.164645] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670256.276275] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670256.375656] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670256.505803] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670256.601150] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670256.711654] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670256.815586] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670256.913204] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670257.037638] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670257.128929] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670257.240957] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+
+[ERROR] [WallTime: 1396670257.367533] bad callback: <function lidar_cb at 0x9298994>
+Traceback (most recent call last):
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/rospy/topics.py", line 682, in _invoke_callback
+    cb(msg)
+  File "/home/ras/RegionV2014/src/lidarnav/src/pcMasking.py", line 23, in lidar_cb
+    oldPoints = [(x,y) for x,y,_,_ in pc2.read_points(data)]
+  File "/opt/ros/hydro/lib/python2.7/dist-packages/sensor_msgs/point_cloud2.py", line 76, in read_points
+    assert isinstance(cloud, roslib.message.Message) and cloud._type == 'sensor_msgs/PointCloud2', 'cloud is not a sensor_msgs.msg.PointCloud2'
+AttributeError: 'module' object has no attribute 'message'
+

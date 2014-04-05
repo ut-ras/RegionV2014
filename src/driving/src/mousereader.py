@@ -46,7 +46,7 @@ def main():
     rospy.Service('mouse/reset', SetTwist, reset)
     pub = rospy.Publisher('mouse/pose', Twist)
 
-    scale = float(rospy.get_param('~scale', 0.001*(1/34.463)))
+    scale = float(rospy.get_param('~scale', 0.001*0.0254)) #47.18
 
     rospy.loginfo('Initialized mousereading')
 

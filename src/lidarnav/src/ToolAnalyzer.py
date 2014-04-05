@@ -30,7 +30,7 @@ class ToolAnalyzer:
 
         self.out_img = None
 
-    def update(self, data):
+    def getPoints(self, data):
         def w(x): 
             return int(self.res * (.5-x) *2)
         def h(y): 
@@ -65,11 +65,40 @@ class ToolAnalyzer:
         contours, hieracy = cv2.findContours(
             img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        contours = sorted(contours, key=lambda x:cv2.arcLength(x, True))[0:3]
-        (x,y) = sum(contour[0])
+        contours = sorted(contours, key=lambda x:-cv2.arcLength(x, True))[0:3]
+
+        # sum each contour
+        centers = []
+        for i in range(len(contours)):
+            center = [0,0]
+            for p in contours[i]:
+                center[0] += p[0][0]
+                center[1] += p[0][1]
+            center[0] /= len(contours[i]) 
+            center[1] /= len(contours[i]) 
+            centers.append(center)
  
         if self.debug:
             cv2.drawContours(out, contours, -1, (0, 0, 255), 1)
-            self.out_img = cv.fromarray(out)
+            for c in centers:
+                cv2.circle(out, (c[0], c[1]), 10, (255,0,0))
+                self.out_img = out
+
+        return centers
+
+    def getPosOfTool(self, index, cloud):
+        points = sorted(self.getPoints(cloud), key=lambda p:p[0])
+        
+        if len(points) != 3:
+            rospy.logerr("tool location detection: detecting "+len(points)+" contours instead of 3")
+            return False
+
+        p = points[index]
+
+        if self.debug:
+            cv2.circle(self.out_img, (p[0], p[1]), 10, (255,255,0))
+            self.out_img = cv.fromarray(self.out_img)
+        
+        return p
 
 

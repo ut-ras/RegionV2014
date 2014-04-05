@@ -18,16 +18,18 @@ DEBUG_TOPIC = "tools/image"
 anaylzer = None
 image_pub = None
 state_pub = None
+index = None
 
 def callback(data):
-    global analyzer, state_pub, image_pub
-    analyzer.update(data)
+    global analyzer, state_pub, image_pub, index
+    analyzer.getPosOfTool(index, data)
     
     if analyzer.debug:
         image_pub.publish(bridge.cv_to_imgmsg(analyzer.out_img, "bgr8"))
 
 def main():
     global analyzer, bridge, image_pub, state_pub
+    global SUB_TOPIC, PUB_TOPIC
     bridge = CvBridge()
     
     rospy.init_node('toolinfo')
@@ -42,6 +44,11 @@ def main():
 
     SUB_TOPIC = rospy.get_param('~subtopic', SUB_TOPIC)
     PUB_TOPIC = rospy.get_param('~pubtopic', PUB_TOPIC)
+    
+    global index
+    index = rospy.get_param('~index', 0)
+    print index
+     
     rospy.loginfo("subscribing to "+SUB_TOPIC+" and publishing to "+PUB_TOPIC)
 
     rospy.spin()

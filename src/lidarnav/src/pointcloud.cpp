@@ -29,7 +29,6 @@ void PointClouder::scan_cb(const sensor_msgs::LaserScan::ConstPtr &scan) {
         ROS_WARN("%s", e.what());
     } 
 
-    cloud.header.seq = scan->header.seq;
     cloud.header.stamp = scan->header.stamp;
     pointcloud_pub.publish(cloud);
 }

@@ -10,6 +10,7 @@ from roslib import message
 import sensor_msgs.point_cloud2 as pc2
 from sensor_msgs.msg import PointCloud2
 from driving.msg import Twist
+from driving.srv import SetTwist
 
 mec_pub = None
 
@@ -145,15 +146,18 @@ def main():
     rospy.init_node('navi')
 
     kd = float(rospy.get_param('~kd', 0.02))
-    ka = float(rospy.get_param('~ka', -0.2))
+    ka = float(rospy.get_param('~ka', -0.6))
     dist = float(rospy.get_param('~dist', 60))
     tspeed = float(rospy.get_param('~tspeed', 0.25))
     rspeed = float(rospy.get_param('~rspeed', 0.25))
 
     mec_pub = rospy.Publisher('driving/velcmd', Twist)
     rospy.Subscriber('mouse/pose', Twist, mouse_cb)
+    reset = rospy.ServiceProxy('mouse/reset', SetTwist)
 
-    translate(1.0, 0.0)
+    reset(0, 0, 0);
+    translate(0.914, -0.3)
+#    translate(21, 0.3)
     rospy.loginfo('Done!')
 
     rospy.spin()
