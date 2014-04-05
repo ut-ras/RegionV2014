@@ -1,0 +1,12 @@
+<launch>
+    <include file="$(find launch_files)/launch/lidar.launch" />
+    <node pkg="lidarnav" type="wall_info" name="wall_info">
+        <param name="debug" value="False"/>
+    </node>
+    <!--<node pkg="lidarnav" type="pcmask" name="pcmask">-->
+    <!--<node pkg="lidarnav" type="navi2" name="navi" />-->
+    <node pkg="driving" type="mecanum_drive.py" name="mecanum_drive"/>
+    <node pkg="driving" type="lm4f.py" name="lm4f"/>
+    <node pkg="driving" type="dummy.py" name="dummy" output="screen" />
+    <node pkg="driving" type="mousereader.py" name="mousereader"/>
+</launch>

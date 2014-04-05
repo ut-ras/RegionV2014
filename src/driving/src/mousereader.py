@@ -20,7 +20,7 @@ def reset(data):
     global xsum, ysum
 
     xsum, ysum = data.x, data.y
-    pub.publish(Twist(data.x, data.y, 0))
+    pub.publish(Twist(x=data.x, y=data.y, a=0))
     return SetTwistResponse()
 
 
@@ -55,7 +55,7 @@ def main():
         xsum += x
         ysum += y
 
-        pub.publish(Twist(scale*xsum, scale*ysum, 0))
+        pub.publish(Twist(x=scale*xsum, y=scale*ysum, a=0))
 
     mouse.close()
 

@@ -1,0 +1,163 @@
+#!/usr/bin/env python2
+
+import math
+import numpy
+
+import rospy
+import roslib
+from roslib import message
+
+import sensor_msgs.point_cloud2 as pc2
+from sensor_msgs.msg import PointCloud2
+from driving.msg import Twist
+
+mec_pub = None
+
+kd = 0
+ka = 0
+kr = 0
+
+speed = 0
+dist = 0
+rdest = 0
+
+ldist = 0
+mpose = (0, 0)
+
+
+
+def advance_first(data):
+    global ldist
+    global tspeed
+    ldist = data.y
+    mec_pub.publish(Twist(x=speed, y=0, a=0))
+
+
+def advace_second(data):
+    global ldist
+    global kr
+
+    errd = kd * (data.y-dist)
+
+    mec_pub.publish(Twist(x=errd, y=0, a=0))
+
+
+def advance(tspeed):
+    global dist, speed
+    global mec_pub
+    global ldist
+
+    rospy.loginfo('advancing')
+
+    ldist = 1000
+    speed = tspeed
+    pose_sub = rospy.Subscriber('lidar/pose', Twist, advance_first)
+
+    while ldist > 100:
+        rospy.sleep(0.0001)
+
+    pose_sub.unregister()
+    pose_sub = rospy.Subscriber('lidar/pose', Twist, advance_second)
+
+    while ldist > dist:
+        rospy.sleep(0.0001)
+
+    pose_sub.unregister()
+    mec_pub.publish(Twist(x=0, y=0, a=0))
+
+
+def rploop(data):
+    global kr
+    global rdest
+    global mec_pub
+
+    errr = kr * (data.x-rdest)
+
+    mec_pub.publish(Twist(x=0, y=0, a=errr))
+
+
+def rotate(rang):
+    global rspeed
+    global mpose
+    global mec_pub
+    global rdest
+
+    rospy.loginfo('rotating: %d', rang)
+
+    px = mpose[0]
+    rdist = 0.0254 * rang
+    rdest = rdist + px
+
+    pose_sub = rospy.Subscriber('mouse/pose', Twist, rploop)
+
+    while abs(mpose[0]-px) < rdist and not rospy.is_shutdown():
+        rospy.sleep(0.0001)
+
+    pose_sub.unregister()
+    mec_pub.publish(Twist(x=0, y=0, a=0))
+
+
+def tploop(data):
+    global dist, speed
+    global kd, ka
+    global mec_pub
+
+    errd = kd * (data.y-dist)
+    erra = ka * data.a
+
+    x = speed*math.cos(data.a) - errd*math.sin(data.a)
+    y = speed*math.sin(data.a) + errd*math.cos(data.a)
+
+    t = Twist(x=x, y=y, a=erra)
+    t.header.stamp = data.header.stamp
+    mec_pub.publish(t)
+
+
+def translate(tdist, tspeed):
+    global speed, dist
+    global mpose
+    global mec_pub
+
+    rospy.loginfo('translating: %f', tdist)
+
+    px = mpose[0]
+    speed = tspeed
+
+    pose_sub = rospy.Subscriber('lidar/pose', Twist, tploop)
+    
+    while abs(mpose[0]-px) < tdist and not rospy.is_shutdown():
+        rospy.sleep(0.0001)
+
+    pose_sub.unregister()
+    mec_pub.publish(Twist(x=0, y=0, a=0))
+    
+
+def mouse_cb(data):
+    global mpose
+    mpose = (data.x, data.y)
+
+
+def main():
+    global mec_pub
+    global kd, ka
+    global tspeed, rspeed, dist
+
+    rospy.init_node('navi')
+
+    kd = float(rospy.get_param('~kd', 0.02))
+    ka = float(rospy.get_param('~ka', -0.2))
+    dist = float(rospy.get_param('~dist', 60))
+    tspeed = float(rospy.get_param('~tspeed', 0.25))
+    rspeed = float(rospy.get_param('~rspeed', 0.25))
+
+    mec_pub = rospy.Publisher('driving/velcmd', Twist)
+    rospy.Subscriber('mouse/pose', Twist, mouse_cb)
+
+    translate(1.0, 0.0)
+    rospy.loginfo('Done!')
+
+    rospy.spin()
+
+
+if __name__ == "__main__":
+    main()

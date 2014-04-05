@@ -11,6 +11,10 @@ from cv_bridge import CvBridge
 from lidarnav.msg import WallState
 from ToolAnalyzer import ToolAnalyzer
 
+SUB_TOPIC = "cloud"
+PUB_TOPIC = "tools/state"
+DEBUG_TOPIC = "tools/image"
+
 anaylzer = None
 image_pub = None
 state_pub = None
@@ -25,16 +29,20 @@ def callback(data):
 def main():
     global analyzer, bridge, image_pub, state_pub
     bridge = CvBridge()
-
+    
     rospy.init_node('toolinfo')
 
-    debug = bool(rospy.get_param('~debug'))
+    debug = rospy.get_param('~debug', False)
     analyzer = ToolAnalyzer(debug)
 
-    rospy.Subscriber('cloud', PointCloud2, callback)
+    rospy.Subscriber(SUB_TOPIC, PointCloud2, callback)
     if debug:
-        image_pub = rospy.Publisher('tools/image', Image)
-    state_pub = rospy.Publisher('tools/state', WallState)
+        image_pub = rospy.Publisher(DEBUG_TOPIC, Image)
+    state_pub = rospy.Publisher(PUB_TOPIC, WallState)
+
+    SUB_TOPIC = rospy.get_param('~subtopic', SUB_TOPIC)
+    PUB_TOPIC = rospy.get_param('~pubtopic', PUB_TOPIC)
+    rospy.loginfo("subscribing to "+SUB_TOPIC+" and publishing to "+PUB_TOPIC)
 
     rospy.spin()
 

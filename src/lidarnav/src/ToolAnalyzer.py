@@ -30,27 +30,16 @@ class ToolAnalyzer:
 
         self.out_img = None
 
-
-    def uangle(self, a, b):
-        r = -math.atan2(-a[1]*b[0] + a[0]*b[1], 
-                        numpy.dot(a, b))
-
-        if r > PI2: r = PI - r
-        if r < -PI2: r = -PI - r
-        
-        return (PI2 - abs(r))/PI2
-
-
     def update(self, data):
         def w(x): 
             return int(self.res * (.5-x) *2)
         def h(y): 
             return int(self.res * (.25-y) *2)
-        def dist(l):
-            return ((l[0]-l[2])**2 + (l[1]-l[3])**2)
 
         img = numpy.zeros((self.height,self.width,1), numpy.uint8)
-        out = numpy.zeros((self.height,self.width,3), numpy.uint8)
+
+        if self.debug:
+            out = numpy.zeros((self.height,self.width,3), numpy.uint8)
 
         points = [(x,y) for x,y,_,_ in pc2.read_points(data)]
 
@@ -58,22 +47,29 @@ class ToolAnalyzer:
             if x+1 < self.height and y+1 < self.width and x >= 0 and y >= 0:
                 img[x,y] = 255
 
-        out = cv2.cvtColor(img, cv.CV_GRAY2BGR)       
+        if self.debug:
+            out = cv2.cvtColor(img, cv.CV_GRAY2BGR)       
  
         img = cv2.blur(img,(3,3)) 
         img = cv2.threshold(img, 60, 255, cv2.THRESH_BINARY)[1]
-        out[:,:,0] = img[:,:]
+        
+        if self.debug:
+            out[:,:,0] = img[:,:]
         
         kernel = numpy.ones(self.dialation, numpy.uint8)
         img = cv2.dilate(img, kernel)
-        out[:,:,1] = img[:,:]
+
+        if self.debug:
+            out[:,:,1] = img[:,:]
         
-        contours, hieracy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        cv2.drawContours(out, contours, -1, (0, 0, 255), 1)
-       
-        
+        contours, hieracy = cv2.findContours(
+            img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        contours = sorted(contours, key=lambda x:cv2.arcLength(x, True))[0:3]
+        (x,y) = sum(contour[0])
  
         if self.debug:
+            cv2.drawContours(out, contours, -1, (0, 0, 255), 1)
             self.out_img = cv.fromarray(out)
 
 

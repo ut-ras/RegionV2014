@@ -1,0 +1,9 @@
+<launch>
+    <include file="$(find 2dnav_pr2)/move_base/2dnav_pr2.launch"/>
+    <node pkg="lidarnav" type="wall_info" name="wall_info"/>
+    <!--<node pkg="lidarnav" type="pcmask" name="pcmask">-->
+    <!--<node pkg="lidarnav" type="navi2" name="navi2">-->
+    <!--<node pkg="driving" type="dummy" name="dummy">-->
+    <!--<node pkg="driving" type="mecanum_drive.py" name="mecanum_drive.py">-->
+    <!--<node pkg="driving" type="lm4f" name="lm4f">-->
+</launch>

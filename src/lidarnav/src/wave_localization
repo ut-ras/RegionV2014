@@ -25,6 +25,11 @@ def callback(data):
     pose.x = localizer.location
     pose.y = analyzer.wall_ydistance
     pose.a = analyzer.wall_angle
+    
+    pose.header.stamp = data.header.stamp
+
+    print "publishing"
+    
     pub.publish(pose)
 
 def main():
@@ -32,9 +37,9 @@ def main():
 
     rospy.init_node('find_gap')
 
-    debug = bool(rospy.get_param('~debug'))
-    pweight = float(rospy.get_param('~pweight', 1))
-    kweight = float(rospy.get_param('~kweight', 50))
+    debug = rospy.get_param('~debug', False)
+    pweight = rospy.get_param('~pweight', 1.)
+    kweight = rospy.get_param('~kweight', 50.)
     analyzer = WallAnalyzer(debug, pweight, kweight)
     localizer = WallGapLocalizer(debug)
 
@@ -42,8 +47,6 @@ def main():
     pub = rospy.Publisher('pose', Twist)
     
     rospy.spin()
-
-
 
 if __name__ == "__main__":
     main()

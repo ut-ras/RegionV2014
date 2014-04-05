@@ -8,7 +8,7 @@ from sensor_msgs.msg import PointCloud2
 from sensor_msgs.msg import Image
 
 from cv_bridge import CvBridge
-from lidarnav.msg import WallState
+from driving.msg import Twist
 from WallAnalyzer import WallAnalyzer
 
 anaylzer = None
@@ -19,10 +19,10 @@ def callback(data):
     global analyzer, state_pub, image_pub
     analyzer.update(data)
     
-    output = WallState()
-    output.angle = analyzer.wall_angle
-    output.distance = analyzer.wall_ydistance
-    output.wall = analyzer.wall_arr
+    output = Twist()
+    output.a = analyzer.wall_angle
+    output.y = analyzer.wall_ydistance
+    output.header.stamp = data.header.stamp
     state_pub.publish(output)    
 
     if analyzer.debug:
@@ -34,7 +34,7 @@ def main():
 
     rospy.init_node('wallinfo')
 
-    debug = bool(rospy.get_param('~debug'))
+    debug = rospy.get_param('~debug', False)
     pweight = float(rospy.get_param('~pweight', 1))
     kweight = float(rospy.get_param('~kweight', 50))
     analyzer = WallAnalyzer(debug, pweight, kweight)
@@ -42,7 +42,7 @@ def main():
     rospy.Subscriber('cloud', PointCloud2, callback)
     if debug:
         image_pub = rospy.Publisher('wall/image', Image)
-    state_pub = rospy.Publisher('wall/state', WallState)
+    state_pub = rospy.Publisher('lidar/pose', Twist)
 
     if debug:
         while not rospy.is_shutdown():
